@@ -1,4 +1,4 @@
-package com.example.db_for_st;
+package com.example.sq_lite;
 
 import org.junit.Test;
 

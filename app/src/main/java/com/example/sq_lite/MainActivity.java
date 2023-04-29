@@ -1,4 +1,4 @@
-package com.example.db_for_st;
+package com.example.sq_lite;
 
 import android.app.Activity;
 import android.content.Context;
@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
         mContext = this;
         mDBConnector = new DBMatches(this);
         mListView = (ListView)findViewById(R.id.list);
-        myAdapter = new myListAdapter(mContext,mDBConnector.selectAll());
+        myAdapter = new myListAdapter(mContext, mDBConnector.selectAll());
         mListView.setAdapter(myAdapter);
         registerForContextMenu(mListView);
 
@@ -49,7 +49,6 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -87,8 +86,8 @@ public class MainActivity extends Activity {
         switch(item.getItemId()) {
             case R.id.edit:
                 Intent i = new Intent(mContext, AddActivity.class);
-                Matches md = mDBConnector.select(info.id);
-                i.putExtra("Matches", md);
+                Noteq mq = mDBConnector.select(info.id);
+                i.putExtra("Note", mq);
                 startActivityForResult(i, UPDATE_ACTIVITY);
                 updateList();
                 return true;
@@ -109,34 +108,34 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == Activity.RESULT_OK) {
-            Matches md = (Matches) data.getExtras().getSerializable("Matches");
+            Noteq mn = (Noteq) data.getExtras().getSerializable("Note");
             if (requestCode == UPDATE_ACTIVITY)
-                mDBConnector.update(md);
+                mDBConnector.update(mn);
             else
-                mDBConnector.insert(md.getTeamhouse(), md.getTeamguest(), md.getGoalshouse(), md.getGoalsguest());
+                mDBConnector.insert(mn.getName(), mn.getNote());
             updateList();
         }
     }
 
     class myListAdapter extends BaseAdapter {
         private LayoutInflater mLayoutInflater;
-        private ArrayList<Matches> arrayMyMatches;
+        private ArrayList<Noteq> arrayMyNote;
 
-        public myListAdapter (Context ctx, ArrayList<Matches> arr) {
+        public myListAdapter (Context ctx, ArrayList<Noteq> arr) {
             mLayoutInflater = LayoutInflater.from(ctx);
             setArrayMyData(arr);
         }
 
-        public ArrayList<Matches> getArrayMyData() {
-            return arrayMyMatches;
+        public ArrayList<Noteq> getArrayMyData() {
+            return arrayMyNote;
         }
 
-        public void setArrayMyData(ArrayList<Matches> arrayMyData) {
-            this.arrayMyMatches = arrayMyData;
+        public void setArrayMyData(ArrayList<Noteq> arrayMyData) {
+            this.arrayMyNote = arrayMyData;
         }
 
         public int getCount () {
-            return arrayMyMatches.size();
+            return arrayMyNote.size();
         }
 
         public Object getItem (int position) {
@@ -145,7 +144,7 @@ public class MainActivity extends Activity {
         }
 
         public long getItemId (int position) {
-            Matches md = arrayMyMatches.get(position);
+            Noteq md = arrayMyNote.get(position);
             if (md != null) {
                 return md.getId();
             }
@@ -157,17 +156,14 @@ public class MainActivity extends Activity {
             if (convertView == null)
                 convertView = mLayoutInflater.inflate(R.layout.item, null);
 
-            TextView vTeamHome= (TextView)convertView.findViewById(R.id.TeamHome);
-            TextView vTeamGuest = (TextView)convertView.findViewById(R.id.TeamGuest);
-            TextView vTotal=(TextView)convertView.findViewById(R.id.TeamTotal);
+            TextView vName = (TextView)convertView.findViewById(R.id.name);
+            TextView vNote = (TextView)convertView.findViewById(R.id.note);
 
-
-            Matches md = arrayMyMatches.get(position);
-            vTeamHome.setText(md.getTeamhouse());
-            vTeamGuest.setText(md.getTeamguest());
-            vTotal.setText(md.getGoalshouse()+":"+md.getGoalsguest());
+            Noteq md = arrayMyNote.get(position);
+            vName.setText(md.getName());
+            vNote.setText(md.getNote());
 
             return convertView;
         }
-    } // end myAdapter
+    }
 }

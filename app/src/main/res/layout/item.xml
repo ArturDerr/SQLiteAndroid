@@ -4,49 +4,42 @@
     android:layout_width="wrap_content">
 
     <LinearLayout
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp">
+
         <TextView
-            android:id="@+id/TeamHome"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#677566"
-            />
+            android:layout_weight="1"
+            android:text="Название заметки:"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:textColor="#677566"
-            android:text="-"
-            />
-        <TextView
-            android:id="@+id/TeamGuest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#677566"
-            />
+            android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#677566"
-            android:text="      "
-            />
+            android:text="Текст:"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
-            android:id="@+id/TeamTotal"
+            android:id="@+id/note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:textColor="#677566"
-            />
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 </LinearLayout>

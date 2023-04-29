@@ -1,4 +1,4 @@
-package com.example.db_for_st;
+package com.example.sq_lite;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,16 +15,12 @@ public class DBMatches {
     private static final String TABLE_NAME = "tableMatches";
 
     private static final String COLUMN_ID = "id";
-    private static final String COLUMN_TEAMHOME = "TeamНоme";
-    private static final String COLUMN_TEAMGUAST = "TeamGuest";
-    private static final String COLUMN_GOALSHOME = "GoalsHome";
-    private static final String COLUMN_GOALSGUAST = "GoalsGuast";
+    private static final String COLUMN_NAME= "NAME";
+    private static final String COLUMN_NOTE = "NOTE";
 
     private static final int NUM_COLUMN_ID = 0;
-    private static final int NUM_COLUMN_TEAMHOME = 1;
-    private static final int NUM_COLUMN_TEAMGUAST = 2;
-    private static final int NUM_COLUMN_GOALSHOME = 3;
-    private static final int NUM_COLUMN_GOALSGUEST = 4;
+    private static final int NUM_COLUMN_NAME = 1;
+    private static final int NUM_COLUMN_NOTE = 2;
 
     private SQLiteDatabase mDataBase;
 
@@ -33,21 +29,17 @@ public class DBMatches {
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    public long insert(String teamhouse, String teamguest, int goalshouse, int goalsguest) {
-        ContentValues cv=new ContentValues();
-        cv.put(COLUMN_TEAMHOME, teamhouse);
-        cv.put(COLUMN_TEAMGUAST, teamguest);
-        cv.put(COLUMN_GOALSHOME, goalshouse);
-        cv.put(COLUMN_GOALSGUAST,goalsguest);
+    public long insert(String date, String note) {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_NAME, date);
+        cv.put(COLUMN_NOTE, note);
         return mDataBase.insert(TABLE_NAME, null, cv);
     }
 
-    public int update(Matches md) {
+    public int update(Noteq md) {
         ContentValues cv=new ContentValues();
-        cv.put(COLUMN_TEAMHOME, md.getTeamhouse());
-        cv.put(COLUMN_TEAMGUAST, md.getTeamguest());
-        cv.put(COLUMN_GOALSHOME, md.getGoalshouse());
-        cv.put(COLUMN_GOALSGUAST,md.getGoalsguest());
+        cv.put(COLUMN_NAME, md.getName());
+        cv.put(COLUMN_NOTE, md.getNote());
         return mDataBase.update(TABLE_NAME, cv, COLUMN_ID + " = ?",new String[] { String.valueOf(md.getId())});
     }
 
@@ -59,30 +51,26 @@ public class DBMatches {
         mDataBase.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
     }
 
-    public Matches select(long id) {
+    public Noteq select(long id) {
         Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
 
         mCursor.moveToFirst();
-        String TeamHome = mCursor.getString(NUM_COLUMN_TEAMHOME);
-        String TeamGuest = mCursor.getString(NUM_COLUMN_TEAMGUAST);
-        int GoalsHome = mCursor.getInt(NUM_COLUMN_GOALSHOME);
-        int GoalsGuest=mCursor.getInt(NUM_COLUMN_GOALSGUEST);
-        return new Matches(id, TeamHome, TeamGuest, GoalsHome,GoalsGuest);
+        String Date = mCursor.getString(NUM_COLUMN_NAME);
+        String Note = mCursor.getString(NUM_COLUMN_NOTE);
+        return new Noteq(id, Date, Note);
     }
 
-    public ArrayList<Matches> selectAll() {
+    public ArrayList<Noteq> selectAll() {
         Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, null);
 
-        ArrayList<Matches> arr = new ArrayList<Matches>();
+        ArrayList<Noteq> arr = new ArrayList<Noteq>();
         mCursor.moveToFirst();
         if (!mCursor.isAfterLast()) {
             do {
                 long id = mCursor.getLong(NUM_COLUMN_ID);
-                String TeamHome = mCursor.getString(NUM_COLUMN_TEAMHOME);
-                String TeamGuest = mCursor.getString(NUM_COLUMN_TEAMGUAST);
-                int GoalsHome = mCursor.getInt(NUM_COLUMN_GOALSHOME);
-                int GoalsGuest=mCursor.getInt(NUM_COLUMN_GOALSGUEST);
-                arr.add(new Matches(id, TeamHome, TeamGuest, GoalsHome,GoalsGuest));
+                String Date = mCursor.getString(NUM_COLUMN_NAME);
+                String Note = mCursor.getString(NUM_COLUMN_NOTE);
+                arr.add(new Noteq(id, Date, Note));
             } while (mCursor.moveToNext());
         }
         return arr;
@@ -97,10 +85,8 @@ public class DBMatches {
         public void onCreate(SQLiteDatabase db) {
             String query = "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_TEAMHOME+ " TEXT, " +
-                    COLUMN_TEAMGUAST + " TEXT, " +
-                    COLUMN_GOALSHOME + " INT,"+
-                    COLUMN_GOALSGUAST+" INT);";
+                    COLUMN_NAME+ " TEXT, " +
+                    COLUMN_NOTE + " TEXT);";
             db.execSQL(query);
         }
 
